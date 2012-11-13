@@ -1,4 +1,4 @@
-Changes
+Changes while refactoring
 
   1. The "c" argument does not seem to be used. Removed it
   2. The contents of the loop through the parameters is self-contained and does not depend of aother parts of function. Also it provides a determined functional and calculates a concrete value. Moved it to a separate function getValueFormated.
@@ -10,4 +10,4 @@ Changes
   8. The condition "chunk.length > 5" does not make any effect. Removed id
   9. this.domElement is undefined. Used document instead
   9. Is "ample" an external component? There is written in the taks that function has no dependencies...
-  10. I don't think that name "calculatevalueandaddtohtmlobject" is optimal. I changed the signature of the function and saved an old one for compatibility and marked it as deprecated.
+  10. I don't think that name "calculatevalueandaddtohtmlobject" is optimal. It does not calculate values, it formats them. And this name is not well-readable. I changed the signature of the function and saved an old one for compatibility and marked it as deprecated.
