@@ -11,10 +11,15 @@ function calculatevalueandaddtohtmlobject (a, b) {
 	// The parameters are objects that have type, value, name, enum values.
 	// The parameter type can be CSV_2_TO_10, CSV_2_TO_INF, CSV_1_TO_INF, ENUM, BOOLEAN and COUNTRY
 	var parameters = b.parameters;
-	for (var i = 0, parameter; parameter = parameters[i++];) {
-		
-
-		frag.appendChild(ample.query("<tr/>").append(ample.query("<td/>").text((parameter.name || "").htmlSpecialChars())).append(ample.query("<td/>").text((value || "").htmlSpecialChars()))[0]);
+	var value;
+	var i;
+	for (i = 0; parameter = parameters; i++) {
+		value = getValueFormated(parameter);
+		frag.appendChild(
+			ample.query("<tr/>")
+				.append(ample.query("<td/>").text((parameter.name || "").htmlSpecialChars()))
+				.append(ample.query("<td/>").text((value || "").htmlSpecialChars()))[0]
+		);
 	};
 
 	tBody.parentNode.replaceChild(frag, tBody);
@@ -25,33 +30,31 @@ function getValueFormated(parameter) {
 	var csv = parameter.type == "CSV_2_TO_10" || parameter.type == "CSV_2_TO_INF" || parameter.type == "CSV_1_TO_INF";
 	if (csv) {
 		var chunks = value.split(",");
-		for (var i = 0, len = chunks.length, chunk; i < len; i++) {
+		var chunk;
+		var i;
+		for (i = 0, len = chunks.length; i < len; i++) {
 			chunk = chunks[i];
 			if (chunk.length > 50) {
-				if (text.length > 5) {
-					for (var j = 0, len = chunk.length; j <= len; j += 5) {
-						// save this line after the operator
-						wrapperText += chunk.substring(j, j + 5) + "\u200B";
-					}
-				} else {
-					wrapperText = chunk;
+				var wrapperText;
+				var j;
+				for (j = 0; j < chunk.length; j += 5) {
+					// save this line after the operator
+					wrapperText += chunk.substring(j, j + 5) + "\u200B";
 				}
+				chunk = wrapperText;
 			}
 		}
 		value = chunks.join(", ");
 	}
 	if (parameter.type == "ENUM") {
-		if (parameter.enumValues[parameter.value - 1]){
-			// save this line after the operator
+		if (parameter.enumValues[parameter.value - 1]) {
 			value = parameter.enumValues[parameter.value - 1].displayName;
 		} else {
 			value = "";
-		} 
+		}
 	} else if (parameter.type == "COUNTRY") {
-		// save this line after the operator
 		value = getCountryDisplayNameByCode(parameter.value) || "";
 	} else if (parameter.type == "BOOLEAN") {
-		// save this line after the operator
 		value = (parameter.value && (parameter.value != "0") ? "%STATICTEXT_YES%" : "%STATICTEXT_NO%");
 	}
 
